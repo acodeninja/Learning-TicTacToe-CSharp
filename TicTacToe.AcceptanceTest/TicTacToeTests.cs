@@ -9,19 +9,86 @@ namespace TicTacToe.AcceptanceTest
 {
     public class Tests
     {
-        [Test]
-        public void GivenANewGameIShouldHaveAnEmptyBoard()
+        private ViewBoard _viewBoard;
+        private NewGame _newGame;
+        private PlaceToken _placeToken;
+
+        private Board _board;
+
+        private void GivenANewGame()
+        {
+            NewGameResponse response = _newGame.Execute(new NewGameRequest());
+            _board = response.Board;
+        }
+        
+        private void WhenIPlaceAToken(string type, int column, int row)
+        {
+            PlaceTokenRequest request = new PlaceTokenRequest
+            {
+                Board = _board,
+                Row = row,
+                Column = column,
+                Type = type,
+            };
+
+            PlaceTokenResponse response = _placeToken.Execute(request);
+
+            _board = response.Board;
+        }
+        
+        private void ExpectAnEmptyBoard()
         {
             ViewBoardRequest request = new ViewBoardRequest();
+            ViewBoardResponse response = _viewBoard.Execute(request);
+            
+            response.Board.Should().BeEquivalentTo(new Board());
+        }
+        
+        private void ExpectAGridWithXTokenAtFirstPosition()
+        {
+            ViewBoardRequest request = new ViewBoardRequest();
+            ViewBoardResponse response = _viewBoard.Execute(request);
+            
+            response.Board.Grid.Should().BeEquivalentTo(new string[] {"X", null, null, null, null, null, null, null, null});
+        }
+        
+        private void ExpectAGridWithXTokenAtLastPosition()
+        {
+            ViewBoardRequest request = new ViewBoardRequest();
+            ViewBoardResponse response = _viewBoard.Execute(request);
+            
+            response.Board.Grid.Should().BeEquivalentTo(new string[] {null, null, null, null, null, null, null, null, "X"});
+        }
 
-            ViewBoard viewBoard = new ViewBoard(new BoardGateway());
+        [SetUp]
+        public void SetUp()
+        {
+            _placeToken = new PlaceToken(new JsonBoardGateway());
+            _viewBoard = new ViewBoard(new JsonBoardGateway());
+            _newGame = new NewGame(new JsonBoardGateway());
+        }
 
-            ViewBoardResponse response = viewBoard.Execute(request);
+        [Test]
+        public void GivenANewGameThenIShouldHaveAnEmptyBoard()
+        {
+            GivenANewGame();
+            ExpectAnEmptyBoard();
+        }
 
-            response.Should().BeEquivalentTo(new ViewBoardResponse
-            {
-                Board = new Board()
-            });
+        [Test]
+        public void GivenANewGameWhenIPlaceAnXTokenInTheFirstSquareThenICanViewThatTokenOnTheBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 1, 1);
+            ExpectAGridWithXTokenAtFirstPosition();
+        }
+        
+        [Test]
+        public void GivenANewGameWhenIPlaceAnXTokenInTheLastSquareThenICanViewThatTokenOnTheBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 3, 3);
+            ExpectAGridWithXTokenAtLastPosition();
         }
     }
 }
