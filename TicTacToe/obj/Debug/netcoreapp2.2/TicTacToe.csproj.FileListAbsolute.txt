@@ -1,0 +1,9 @@
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/bin/Debug/netcoreapp2.2/TicTacToe.deps.json
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/bin/Debug/netcoreapp2.2/TicTacToe.dll
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/bin/Debug/netcoreapp2.2/TicTacToe.pdb
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.csprojAssemblyReference.cache
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.csproj.CoreCompileInputs.cache
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.AssemblyInfoInputs.cache
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.AssemblyInfo.cs
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.dll
+/Users/lawrence/Code/LearningProjects/TicTacToe/TicTacToe/TicTacToe/obj/Debug/netcoreapp2.2/TicTacToe.pdb
