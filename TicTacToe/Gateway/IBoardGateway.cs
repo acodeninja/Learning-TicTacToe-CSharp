@@ -1,6 +1,6 @@
 namespace TicTacToe.Gateway
 {
-    public interface IBoardGateway : IBoardReader
+    public interface IBoardGateway : IBoardReader, IBoardWriter
     {
     }
 }
