@@ -6,5 +6,6 @@ namespace TicTacToe.Gateway
     {
         Board Fetch();
         string[] Read(Board board);
+        string Read(Board board, int column, int row);
     }
 }

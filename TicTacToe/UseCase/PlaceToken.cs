@@ -1,5 +1,7 @@
+using System;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
+using TicTacToe.Exception;
 using TicTacToe.Gateway;
 
 namespace TicTacToe.UseCase
@@ -15,12 +17,32 @@ namespace TicTacToe.UseCase
 
         public PlaceTokenResponse Execute(PlaceTokenRequest request)
         {
-            Board board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
-            _boardGateway.Flush(board);
+            Board board = request.Board;
+            System.Exception error = null;
+
+            try
+            {
+                if (_boardGateway.Read(board, request.Column, request.Row) != null)
+                {
+                    throw new AlreadyPlacedException();
+                }
+
+                board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
+                _boardGateway.Flush(board);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                error = new OffBoardException();
+            }
+            catch (AlreadyPlacedException)
+            {
+                error = new AlreadyPlacedException();
+            }
             
             return new PlaceTokenResponse
             {
-                Board = board
+                Board = board,
+                Error = error,
             };
         }
     }

@@ -98,5 +98,14 @@ namespace TicTacToe.AcceptanceTest
             WhenIPlaceAToken("X", 4, 4);
             ExpectAnEmptyBoard();
         }
+
+        [Test]
+        public void GivenANewGameWhenIPlaceATokenOnTheFirstSquareTwiceThenIShouldHaveABoardWithoutTheSecondToken()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 1, 1);
+            WhenIPlaceAToken("O", 1, 1);
+            ExpectAGridWithXTokenAtFirstPosition();
+        }
     }
 }

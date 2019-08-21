@@ -6,6 +6,6 @@ namespace TicTacToe.Gateway
     {
         Board Flush(Board board);
         Board New();
-        Board Write(Board requestBoard, string requestType, int requestColumn, int requestRow);
+        Board Write(Board board, string type, int column, int row);
     }
 }

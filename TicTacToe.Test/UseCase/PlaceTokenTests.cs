@@ -118,5 +118,33 @@ namespace TicTacToe.Test.UseCase
 
             ExpectAResponseWithAGivenGridAndError(response, new string[9], new OffBoardException());
         }
+
+        [Test]
+        public void CannotPlaceATokenOnASquareThatAlreadyHasATokenOnIt()
+        {
+            Board board = New();
+
+            PlaceTokenResponse placeXResponse = Execute(new PlaceTokenRequest
+            {
+                Board = board,
+                Type = "X",
+                Column = 1,
+                Row = 1,
+            });
+
+            PlaceTokenResponse placeYResponse = Execute(new PlaceTokenRequest
+            {
+                Board = placeXResponse.Board,
+                Type = "O",
+                Column = 1,
+                Row = 1,
+            });
+
+            ExpectAResponseWithAGivenGridAndError(
+                placeYResponse,
+                new string[9] {"X", null, null, null, null, null, null, null, null},
+                new AlreadyPlacedException()
+            );
+        }
     }
 }

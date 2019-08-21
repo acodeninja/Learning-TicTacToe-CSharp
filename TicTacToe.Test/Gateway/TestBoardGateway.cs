@@ -22,6 +22,11 @@ namespace TicTacToe.Test.Gateway
             return board.Grid;
         }
 
+        public string Read(Board board, int column, int row)
+        {
+            return board.Grid[3 * (column - 1) + (row - 1)];
+        }
+
         public Board Flush(Board board)
         {
             return board;

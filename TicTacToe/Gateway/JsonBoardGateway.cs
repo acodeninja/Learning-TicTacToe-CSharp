@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using TicTacToe.Domain;
 
@@ -19,13 +20,18 @@ namespace TicTacToe.Gateway
         {
             return board.Grid;
         }
+        
+        public string Read(Board board, int column, int row)
+        {
+            return board.Grid[3 * (column - 1) + (row - 1)];
+        }
 
         public Board Flush(Board board)
         {
             string json = JsonConvert.SerializeObject(board.Grid);
-            
+
             System.IO.File.WriteAllText(@"/tmp/tic-tac-toe.json", json);
-            
+
             return board;
         }
 

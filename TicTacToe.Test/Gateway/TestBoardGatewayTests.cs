@@ -5,9 +5,9 @@ using TicTacToe.Gateway;
 
 namespace TicTacToe.Test.Gateway
 {
-    public class JsonBoardGatewayTests
+    public class TestBoardGatewayTests
     {
-        private JsonBoardGateway _gateway;
+        private TestBoardGateway _gateway;
 
         private void ExpectANewBoard(Board board)
         {
@@ -17,17 +17,17 @@ namespace TicTacToe.Test.Gateway
         private void ExpectAnEmptyGrid(string[] grid)
         {
             grid.Should().BeEquivalentTo(new string[9]);
-        }        
+        }
         
         private void ExpectAGivenGrid(string[] grid, string[] expected)
         {
             grid.Should().BeEquivalentTo(expected);
         }
-
+        
         [SetUp]
         public void SetUp()
         {
-            _gateway = new JsonBoardGateway();
+            _gateway = new TestBoardGateway();
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace TicTacToe.Test.Gateway
 
             ExpectAnEmptyGrid(grid);
         }
-
+        
         [Test]
         public void CanWriteToASquareInTheGrid()
         {
