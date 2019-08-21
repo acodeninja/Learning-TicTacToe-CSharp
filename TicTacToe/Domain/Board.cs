@@ -15,36 +15,57 @@ namespace TicTacToe.Domain
 
         public bool IsComplete()
         {
-            var rowSlicedGrid = new string[][]
+            for (int i = 0; i < Grid.Length; i++)
             {
-                Grid.Take(3).ToArray(), 
-                Grid.Skip(3).Take(3).ToArray(),
-                Grid.Skip(6).Take(3).ToArray(),
-            };
+                if (Grid[i] == null)
+                {
+                    continue;
+                }
 
-            foreach (string[] row in rowSlicedGrid)
+                string tokenUnderEvaluation = Grid[i];
+
+                // evaluate full row from square
+                if (EvaluateSquareIsPartOfCompleteRow(
+                    new[] {new int[3] {0, 1, 2}, new int[3] {3, 4, 5}, new int[3] {6, 7, 8}}, i,
+                    tokenUnderEvaluation)) return true;
+
+                // evaluate full column from square
+                if (EvaluateSquareIsPartOfCompleteRow(
+                    new[] {new int[3] {0, 3, 6}, new int[3] {1, 4, 7}, new int[3] {2, 5, 8}}, i,
+                    tokenUnderEvaluation)) return true;
+
+                // conditionally evaluate diagonal from square
+                if (EvaluateSquareIsPartOfCompleteRow(new[] {new int[3] {0, 4, 8}, new int[3] {2, 4, 6}}, i,
+                    tokenUnderEvaluation)) return true;
+            }
+
+            return false;
+        }
+
+        private bool EvaluateSquareIsPartOfCompleteRow(int[][] rows, int i, string tokenUnderEvaluation)
+        {
+            int[] sudoku = new int[9] {8, 1, 6, 3, 5, 7, 4, 9, 2};
+
+            foreach (int[] row in rows)
             {
-                if (row.SequenceEqual(new string[3] {"X", "X", "X"}) || row.SequenceEqual(new string[3] {"O", "O", "O"}))
+                if (row.Contains(i))
                 {
-                    return true;
+                    int value = 0;
+                    foreach (int rowPosition in row)
+                    {
+                        if (Grid[rowPosition] == tokenUnderEvaluation)
+                        {
+                            value += sudoku[rowPosition];
+                        }
+                    }
+
+                    if (value == 15)
+                    {
+                        return true;
+                    }
                 }
             }
-            
-            string[][] colSlicedGrid = new string[][]
-            {
-                new string[] { Grid[0], Grid[3], Grid[6] },
-                new string[] { Grid[1], Grid[4], Grid[7] },
-                new string[] { Grid[2], Grid[5], Grid[8] },
-            };
-            
-            foreach (string[] col in colSlicedGrid)
-            {
-                if (col.SequenceEqual(new string[3] {"X", "X", "X"}) || col.SequenceEqual(new string[3] {"O", "O", "O"}))
-                {
-                    return true;
-                }
-            }
-            
+
             return false;
         }
     }

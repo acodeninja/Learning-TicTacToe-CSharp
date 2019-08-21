@@ -148,6 +148,17 @@ namespace TicTacToe.AcceptanceTest
         }
 
         [Test]
+        public void GivenANewGameWhenIPlaceAWinningSetOfTokensDiagonallyOnTheBoardThenIShouldHaveACompleteBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 1, 1);
+            WhenIPlaceAToken("X", 2, 2);
+            PlaceTokenResponse response = WhenIPlaceAToken("X", 3, 3);
+
+            ExpectACompleteBoard(response);
+        }
+
+        [Test]
         public void GivenACompleteGameWhenIPlaceATokenOnTheBoardThenTheStateOfTheBoardShouldNotChange()
         {
             GivenACompleteGame();
