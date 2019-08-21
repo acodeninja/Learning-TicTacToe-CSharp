@@ -25,20 +25,9 @@ namespace TicTacToe.UseCase
 
             try
             {
-                if (!new string[] {"X", "O"}.Contains(request.Type))
-                {
-                    throw new InvalidTokenException();
-                }
-
-                if (_boardGateway.Read(board, request.Column, request.Row) != null)
-                {
-                    throw new AlreadyPlacedException();
-                }
-
-                if (board.IsComplete())
-                {
-                    throw new BoardCompleteException();
-                }
+                ValidateTokenType(request);
+                ValidatePositionFree(request);
+                ValidateBoardIncomplete(request);
 
                 board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
 
@@ -60,18 +49,37 @@ namespace TicTacToe.UseCase
             {
                 error = new BoardCompleteException();
             }
-            
-            if (board.IsComplete())
-            {
-                status = new Complete();
-            }
-            
+
             return new PlaceTokenResponse
             {
                 Board = board,
                 Error = error,
-                Status = status,
+                Status = board.IsComplete() ? (IBoardStatus) new Complete() : new Incomplete(),
             };
+        }
+
+        private static void ValidateBoardIncomplete(PlaceTokenRequest request)
+        {
+            if (request.Board.IsComplete())
+            {
+                throw new BoardCompleteException();
+            }
+        }
+
+        private void ValidatePositionFree(PlaceTokenRequest request)
+        {
+            if (_boardGateway.Read(request.Board, request.Column, request.Row) != null)
+            {
+                throw new AlreadyPlacedException();
+            }
+        }
+
+        private static void ValidateTokenType(PlaceTokenRequest request)
+        {
+            if (!new string[] {"X", "O"}.Contains(request.Type))
+            {
+                throw new InvalidTokenException();
+            }
         }
     }
 }
