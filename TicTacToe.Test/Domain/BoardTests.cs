@@ -70,5 +70,16 @@ namespace TicTacToe.Test.Domain
 
             board.IsComplete().Should().Be(true);
         }
+        
+        [Test]
+        public void CanMakeACompleteBoardByPlacingOAtTheEndOfEachRow()
+        {
+            Board board = new Board
+            {
+                Grid = new string[9] {null, null, "O", null, null, "O", null, null, "O"}
+            };
+
+            board.IsComplete().Should().Be(true);
+        }
     }
 }

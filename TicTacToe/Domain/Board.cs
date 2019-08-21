@@ -24,7 +24,7 @@ namespace TicTacToe.Domain
 
             foreach (string[] row in rowSlicedGrid)
             {
-                if (row.SequenceEqual(new string[3] {"X", "X", "X"}))
+                if (row.SequenceEqual(new string[3] {"X", "X", "X"}) || row.SequenceEqual(new string[3] {"O", "O", "O"}))
                 {
                     return true;
                 }
@@ -39,7 +39,7 @@ namespace TicTacToe.Domain
             
             foreach (string[] col in colSlicedGrid)
             {
-                if (col.SequenceEqual(new string[3] {"X", "X", "X"}))
+                if (col.SequenceEqual(new string[3] {"X", "X", "X"}) || col.SequenceEqual(new string[3] {"O", "O", "O"}))
                 {
                     return true;
                 }

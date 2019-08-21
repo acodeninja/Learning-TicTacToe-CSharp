@@ -156,5 +156,16 @@ namespace TicTacToe.AcceptanceTest
             response.Board.IsComplete().Should().BeTrue("The game is finished");
             response.Board.Grid[3 * 1 + 1].Should().BeNullOrEmpty("New tokens are not allowed");
         }
+
+        [Test]
+        public void GivenANewGameWhenIPlaceAWinningCombinationOfOThenIShouldHaveACompleteBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("O", 1, 1);
+            WhenIPlaceAToken("O", 1, 2);
+            PlaceTokenResponse response = WhenIPlaceAToken("O", 1, 3);
+
+            ExpectACompleteBoard(response);
+        }
     }
 }

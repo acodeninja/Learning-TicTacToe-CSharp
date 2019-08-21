@@ -36,17 +36,6 @@ namespace TicTacToe.Test.UseCase
             });
         }
 
-        private static void ExpectAnEmptyBoard(PlaceTokenResponse response)
-        {
-            response.Should().BeEquivalentTo(new PlaceTokenResponse
-            {
-                Board = new Board
-                {
-                    Grid = new string[9],
-                }
-            });
-        }
-
         private static void ExpectAResponseWithAGivenGridAndError(
             PlaceTokenResponse response,
             string[] expectedGrid,
@@ -235,6 +224,38 @@ namespace TicTacToe.Test.UseCase
             });
 
             response.Error.Should().BeOfType<BoardCompleteException>();
+        }
+        
+        [Test]
+        public void CanCompleteAGameByPlacingMultipleOTokens()
+        {
+            Board board = New();
+
+            PlaceTokenResponse response = Execute(new PlaceTokenRequest
+            {
+                Board = board,
+                Type = "O",
+                Column = 1,
+                Row = 1,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "O",
+                Column = 1,
+                Row = 2,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "O",
+                Column = 1,
+                Row = 3,
+            });
+
+            ExpectACompleteBoard(response);
         }
     }
 }
