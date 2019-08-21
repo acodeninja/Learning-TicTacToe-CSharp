@@ -22,7 +22,17 @@ namespace TicTacToe.AcceptanceTest
             _board = response.Board;
         }
 
-        private void WhenIPlaceAToken(string type, int column, int row)
+        private PlaceTokenResponse GivenACompleteGame()
+        {
+            NewGameResponse response = _newGame.Execute(new NewGameRequest());
+            _board = response.Board;
+
+            WhenIPlaceAToken("X", 1, 1);
+            WhenIPlaceAToken("X", 1, 2);
+            return WhenIPlaceAToken("X", 1, 3);
+        }
+
+        private PlaceTokenResponse WhenIPlaceAToken(string type, int column, int row)
         {
             PlaceTokenRequest request = new PlaceTokenRequest
             {
@@ -135,6 +145,16 @@ namespace TicTacToe.AcceptanceTest
             PlaceTokenResponse response = WhenIPlaceAToken("X", 1, 3);
 
             ExpectACompleteBoard(response);
+        }
+
+        [Test]
+        public void GivenACompleteGameWhenIPlaceATokenOnTheBoardThenTheStateOfTheBoardShouldNotChange()
+        {
+            GivenACompleteGame();
+            PlaceTokenResponse response = WhenIPlaceAToken("X", 2, 2);
+
+            response.Board.IsComplete().Should().BeTrue("The game is finished");
+            response.Board.Grid[3 * 1 + 1].Should().BeNullOrEmpty("New tokens are not allowed");
         }
     }
 }

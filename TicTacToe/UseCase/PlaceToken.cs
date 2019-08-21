@@ -35,13 +35,13 @@ namespace TicTacToe.UseCase
                     throw new AlreadyPlacedException();
                 }
 
-                board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
-
                 if (board.IsComplete())
                 {
-                    status = new Complete();
+                    throw new BoardCompleteException();
                 }
-                
+
+                board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
+
                 _boardGateway.Flush(board);
             }
             catch (IndexOutOfRangeException)
@@ -55,6 +55,15 @@ namespace TicTacToe.UseCase
             catch (InvalidTokenException)
             {
                 error = new InvalidTokenException();
+            }
+            catch (BoardCompleteException)
+            {
+                error = new BoardCompleteException();
+            }
+            
+            if (board.IsComplete())
+            {
+                status = new Complete();
             }
             
             return new PlaceTokenResponse

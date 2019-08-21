@@ -196,5 +196,45 @@ namespace TicTacToe.Test.UseCase
 
             ExpectACompleteBoard(response);
         }
+
+        [Test]
+        public void CannotPlaceATokenOnACompleteBoard()
+        {
+            Board board = New();
+
+            PlaceTokenResponse response = Execute(new PlaceTokenRequest
+            {
+                Board = board,
+                Type = "X",
+                Column = 1,
+                Row = 1,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "X",
+                Column = 1,
+                Row = 2,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "X",
+                Column = 1,
+                Row = 3,
+            });
+            
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "X",
+                Column = 2,
+                Row = 2,
+            });
+
+            response.Error.Should().BeOfType<BoardCompleteException>();
+        }
     }
 }
