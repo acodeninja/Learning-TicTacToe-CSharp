@@ -3,24 +3,14 @@ using NUnit.Framework;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
 using TicTacToe.Gateway;
+using TicTacToe.Test.Gateway;
 using TicTacToe.UseCase;
 
 namespace TicTacToe.Test.UseCase
 {
-    public class NewGameTests : IBoardGateway
+    public class NewGameTests : TestBoardGateway, IBoardGateway
     {
-        private Board _board;
         private NewGame _newGame;
-
-        public Board Fetch()
-        {
-            return _board;
-        }
-
-        public string[] Read(Board board)
-        {
-            return board.Grid;
-        }
 
         private NewGameResponse Execute(NewGameRequest request)
         {
@@ -38,7 +28,6 @@ namespace TicTacToe.Test.UseCase
         [SetUp]
         public void SetUp()
         {
-            _board = new Board();
             _newGame = new NewGame(this);
         }
 
@@ -48,24 +37,6 @@ namespace TicTacToe.Test.UseCase
             NewGameResponse response = Execute(new NewGameRequest());
 
             ExpectABoardResponse(response);
-        }
-
-        public Board Flush(Board board)
-        {
-            _board = board;
-            return board;
-        }
-
-        public Board New()
-        {
-            _board = new Board();
-
-            return _board;
-        }
-
-        public Board Write(Board board, string type, int column, int row)
-        {
-            return board;
         }
     }
 }

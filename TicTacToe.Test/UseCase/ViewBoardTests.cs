@@ -3,23 +3,14 @@ using NUnit.Framework;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
 using TicTacToe.Gateway;
+using TicTacToe.Test.Gateway;
 using TicTacToe.UseCase;
 
 namespace TicTacToe.Test.UseCase
 {
-    public class ViewBoardTests : IBoardReader
+    public class ViewBoardTests : TestBoardGateway, IBoardReader
     {
         private ViewBoard _viewBoard;
-
-        public Board Fetch()
-        {
-            return new Board();
-        }
-
-        public string[] Read(Board board)
-        {
-            return board.Grid;
-        }
 
         private ViewBoardResponse Execute(ViewBoardRequest request)
         {
