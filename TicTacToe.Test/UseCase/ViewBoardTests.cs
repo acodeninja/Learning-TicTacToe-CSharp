@@ -2,6 +2,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 using TicTacToe.Gateway;
 using TicTacToe.Test.Gateway;
 using TicTacToe.UseCase;
@@ -19,10 +20,8 @@ namespace TicTacToe.Test.UseCase
 
         private static void ExpectABoardResponse(ViewBoardResponse response)
         {
-            response.Should().BeEquivalentTo(new ViewBoardResponse
-            {
-                Board = new Board()
-            });
+            response.Board.Should().BeEquivalentTo(new Board());
+            response.Status.Should().BeOfType<Incomplete>();
         }
 
         [SetUp]

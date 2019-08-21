@@ -1,4 +1,6 @@
 using TicTacToe.Boundary;
+using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 using TicTacToe.Gateway;
 
 namespace TicTacToe.UseCase
@@ -14,9 +16,12 @@ namespace TicTacToe.UseCase
 
         public ViewBoardResponse Execute(ViewBoardRequest request)
         {
+            Board board = _boardReader.Fetch();
+
             return new ViewBoardResponse
             {
-                Board = _boardReader.Fetch()
+                Board = board,
+                Status = board.IsComplete() ? (IBoardStatus) new Complete() : new Incomplete()
             };
         }
     }
