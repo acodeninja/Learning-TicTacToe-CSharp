@@ -9,9 +9,9 @@ namespace TicTacToe.AcceptanceTest
 {
     public class Tests
     {
-        private ViewBoard _viewBoard;
         private NewGame _newGame;
         private PlaceToken _placeToken;
+        private ViewBoard _viewBoard;
 
         private Board _board;
 
@@ -89,6 +89,14 @@ namespace TicTacToe.AcceptanceTest
             GivenANewGame();
             WhenIPlaceAToken("X", 3, 3);
             ExpectAGridWithXTokenAtLastPosition();
+        }
+
+        [Test]
+        public void GivenANewGameWhenIPlaceATokenOutsideOfTheBoardThenIShouldHaveAnEmptyBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 4, 4);
+            ExpectAnEmptyBoard();
         }
     }
 }
