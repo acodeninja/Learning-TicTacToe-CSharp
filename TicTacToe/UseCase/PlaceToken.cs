@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
 using TicTacToe.Exception;
@@ -22,6 +23,11 @@ namespace TicTacToe.UseCase
 
             try
             {
+                if (!new string[] {"X", "O"}.Contains(request.Type))
+                {
+                    throw new InvalidTokenException();
+                }
+
                 if (_boardGateway.Read(board, request.Column, request.Row) != null)
                 {
                     throw new AlreadyPlacedException();
@@ -37,6 +43,10 @@ namespace TicTacToe.UseCase
             catch (AlreadyPlacedException)
             {
                 error = new AlreadyPlacedException();
+            }
+            catch (InvalidTokenException)
+            {
+                error = new InvalidTokenException();
             }
             
             return new PlaceTokenResponse

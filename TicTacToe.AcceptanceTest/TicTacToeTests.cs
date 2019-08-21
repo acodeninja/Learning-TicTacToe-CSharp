@@ -20,7 +20,7 @@ namespace TicTacToe.AcceptanceTest
             NewGameResponse response = _newGame.Execute(new NewGameRequest());
             _board = response.Board;
         }
-        
+
         private void WhenIPlaceAToken(string type, int column, int row)
         {
             PlaceTokenRequest request = new PlaceTokenRequest
@@ -35,29 +35,31 @@ namespace TicTacToe.AcceptanceTest
 
             _board = response.Board;
         }
-        
+
         private void ExpectAnEmptyBoard()
         {
             ViewBoardRequest request = new ViewBoardRequest();
             ViewBoardResponse response = _viewBoard.Execute(request);
-            
+
             response.Board.Should().BeEquivalentTo(new Board());
         }
-        
+
         private void ExpectAGridWithXTokenAtFirstPosition()
         {
             ViewBoardRequest request = new ViewBoardRequest();
             ViewBoardResponse response = _viewBoard.Execute(request);
-            
-            response.Board.Grid.Should().BeEquivalentTo(new string[] {"X", null, null, null, null, null, null, null, null});
+
+            response.Board.Grid.Should()
+                .BeEquivalentTo(new string[] {"X", null, null, null, null, null, null, null, null});
         }
-        
+
         private void ExpectAGridWithXTokenAtLastPosition()
         {
             ViewBoardRequest request = new ViewBoardRequest();
             ViewBoardResponse response = _viewBoard.Execute(request);
-            
-            response.Board.Grid.Should().BeEquivalentTo(new string[] {null, null, null, null, null, null, null, null, "X"});
+
+            response.Board.Grid.Should()
+                .BeEquivalentTo(new string[] {null, null, null, null, null, null, null, null, "X"});
         }
 
         [SetUp]
@@ -82,7 +84,7 @@ namespace TicTacToe.AcceptanceTest
             WhenIPlaceAToken("X", 1, 1);
             ExpectAGridWithXTokenAtFirstPosition();
         }
-        
+
         [Test]
         public void GivenANewGameWhenIPlaceAnXTokenInTheLastSquareThenICanViewThatTokenOnTheBoard()
         {
@@ -106,6 +108,14 @@ namespace TicTacToe.AcceptanceTest
             WhenIPlaceAToken("X", 1, 1);
             WhenIPlaceAToken("O", 1, 1);
             ExpectAGridWithXTokenAtFirstPosition();
+        }
+
+        [Test]
+        public void GivenANewGameWhenIPlaceAyTokenOnTheFirstSquareThenIShouldHaveAnEmptyBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("Y", 1, 1);
+            ExpectAnEmptyBoard();
         }
     }
 }

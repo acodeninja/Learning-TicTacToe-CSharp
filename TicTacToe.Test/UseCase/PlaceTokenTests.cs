@@ -132,7 +132,7 @@ namespace TicTacToe.Test.UseCase
                 Row = 1,
             });
 
-            PlaceTokenResponse placeYResponse = Execute(new PlaceTokenRequest
+            PlaceTokenResponse placeOResponse = Execute(new PlaceTokenRequest
             {
                 Board = placeXResponse.Board,
                 Type = "O",
@@ -141,9 +141,29 @@ namespace TicTacToe.Test.UseCase
             });
 
             ExpectAResponseWithAGivenGridAndError(
-                placeYResponse,
+                placeOResponse,
                 new string[9] {"X", null, null, null, null, null, null, null, null},
                 new AlreadyPlacedException()
+            );
+        }
+        
+        [Test]
+        public void CannotPlaceAnInvalidToken()
+        {
+            Board board = New();
+
+            PlaceTokenResponse response = Execute(new PlaceTokenRequest
+            {
+                Board = board,
+                Type = "Y",
+                Column = 1,
+                Row = 1,
+            });
+
+            ExpectAResponseWithAGivenGridAndError(
+                response,
+                new string[9],
+                new InvalidTokenException()
             );
         }
     }
