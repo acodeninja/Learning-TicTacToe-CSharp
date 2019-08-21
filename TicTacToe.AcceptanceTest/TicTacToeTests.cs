@@ -2,6 +2,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 using TicTacToe.Gateway;
 using TicTacToe.UseCase;
 
@@ -34,6 +35,8 @@ namespace TicTacToe.AcceptanceTest
             PlaceTokenResponse response = _placeToken.Execute(request);
 
             _board = response.Board;
+
+            return response;
         }
 
         private void ExpectAnEmptyBoard()
@@ -60,6 +63,11 @@ namespace TicTacToe.AcceptanceTest
 
             response.Board.Grid.Should()
                 .BeEquivalentTo(new string[] {null, null, null, null, null, null, null, null, "X"});
+        }
+
+        private static void ExpectACompleteBoard(PlaceTokenResponse response)
+        {
+            response.Status.Should().BeOfType<Complete>();
         }
 
         [SetUp]
@@ -116,6 +124,17 @@ namespace TicTacToe.AcceptanceTest
             GivenANewGame();
             WhenIPlaceAToken("Y", 1, 1);
             ExpectAnEmptyBoard();
+        }
+
+        [Test]
+        public void GivenANewGameWhenIPlaceAWinningSetOfTokensOnTheBoardThenIShouldHaveACompleteBoard()
+        {
+            GivenANewGame();
+            WhenIPlaceAToken("X", 1, 1);
+            WhenIPlaceAToken("X", 1, 2);
+            PlaceTokenResponse response = WhenIPlaceAToken("X", 1, 3);
+
+            ExpectACompleteBoard(response);
         }
     }
 }

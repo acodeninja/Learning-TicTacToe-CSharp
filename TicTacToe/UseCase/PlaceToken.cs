@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 using TicTacToe.Exception;
 using TicTacToe.Gateway;
 
@@ -20,6 +21,7 @@ namespace TicTacToe.UseCase
         {
             Board board = request.Board;
             System.Exception error = null;
+            IBoardStatus status = new Incomplete();
 
             try
             {
@@ -34,6 +36,12 @@ namespace TicTacToe.UseCase
                 }
 
                 board = _boardGateway.Write(request.Board, request.Type, request.Column, request.Row);
+
+                if (board.IsComplete())
+                {
+                    status = new Complete();
+                }
+                
                 _boardGateway.Flush(board);
             }
             catch (IndexOutOfRangeException)
@@ -53,6 +61,7 @@ namespace TicTacToe.UseCase
             {
                 Board = board,
                 Error = error,
+                Status = status,
             };
         }
     }

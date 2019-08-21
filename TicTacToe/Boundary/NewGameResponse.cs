@@ -1,5 +1,6 @@
 using System;
 using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 
 namespace TicTacToe.Boundary
 {
@@ -7,5 +8,6 @@ namespace TicTacToe.Boundary
     {
         public Board Board { get; set; }
         public System.Exception Error { get; set; }
+        public IBoardStatus Status { get; set; }
     }
 }

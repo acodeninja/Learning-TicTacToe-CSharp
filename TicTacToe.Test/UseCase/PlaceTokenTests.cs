@@ -1,7 +1,10 @@
+using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using TicTacToe.Boundary;
 using TicTacToe.Domain;
+using TicTacToe.Domain.BoardStatus;
 using TicTacToe.Exception;
 using TicTacToe.Test.Gateway;
 using TicTacToe.UseCase;
@@ -28,7 +31,8 @@ namespace TicTacToe.Test.UseCase
                 Board = new Board
                 {
                     Grid = grid
-                }
+                },
+                Status = new Incomplete(),
             });
         }
 
@@ -40,18 +44,6 @@ namespace TicTacToe.Test.UseCase
                 {
                     Grid = new string[9],
                 }
-            });
-        }
-
-        private static void ExpectAnEmptyBoardWithOffBoardError(PlaceTokenResponse response)
-        {
-            response.Should().BeEquivalentTo(new PlaceTokenResponse
-            {
-                Board = new Board
-                {
-                    Grid = new string[9],
-                },
-                Error = new OffBoardException(),
             });
         }
 
@@ -68,7 +60,13 @@ namespace TicTacToe.Test.UseCase
                     Grid = expectedGrid,
                 },
                 Error = expectedError,
+                Status = new Incomplete(),
             });
+        }
+        
+        private static void ExpectACompleteBoard(PlaceTokenResponse response)
+        {
+            response.Status.Should().BeOfType<Complete>();
         }
 
         [SetUp]
@@ -146,7 +144,7 @@ namespace TicTacToe.Test.UseCase
                 new AlreadyPlacedException()
             );
         }
-        
+
         [Test]
         public void CannotPlaceAnInvalidToken()
         {
@@ -165,6 +163,38 @@ namespace TicTacToe.Test.UseCase
                 new string[9],
                 new InvalidTokenException()
             );
+        }
+
+        [Test]
+        public void CanCompleteAGameByPlacingMultipleTokens()
+        {
+            Board board = New();
+
+            PlaceTokenResponse response = Execute(new PlaceTokenRequest
+            {
+                Board = board,
+                Type = "X",
+                Column = 1,
+                Row = 1,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "X",
+                Column = 1,
+                Row = 2,
+            });
+
+            response = Execute(new PlaceTokenRequest
+            {
+                Board = response.Board,
+                Type = "X",
+                Column = 1,
+                Row = 3,
+            });
+
+            ExpectACompleteBoard(response);
         }
     }
 }
